@@ -1,0 +1,20 @@
+---
+import EditProfileForm from "@/components/EditProfileForm.astro";
+import ProtectedPageLayout from "@/layout/protectedPageLayout.astro";
+import BackgroundContainer from "../components/common/background-container.astro";
+---
+
+<ProtectedPageLayout title="User Profile">
+  <BackgroundContainer
+    color="rgba(115, 115, 115, 1)"
+    imagePath="/bg-profile.png"
+    classNameImage="left-5"
+    styleNameImage="background-size: 100%; background-position-x: left;"
+    bgLayerAnimDuration=""
+    bgImageAnimType="slide-top-right"
+    bgImageAnimDelay="0.2"
+  >
+    <EditProfileForm />
+  </BackgroundContainer>
+  <script type="module" src="/js/page-anim.js"></script>
+</ProtectedPageLayout>

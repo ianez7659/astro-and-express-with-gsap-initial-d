@@ -1,0 +1,9 @@
+{
+  "name": "astro-express-vercel",
+  "version": "1.0.0",
+  "description": "Astro + Express project for Vercel deployment",
+  "private": true,
+  "scripts": {
+    "build": "cd client && npm install && npm run build && cd ../server && npm install"
+  }
+}

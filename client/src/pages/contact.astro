@@ -1,0 +1,22 @@
+---
+import ContactForm from "../components/ContactForm.astro";
+import ProtectedPageLayout from "../layout/protectedPageLayout.astro";
+import BackgroundContainer from "../components/common/background-container.astro";
+---
+
+<ProtectedPageLayout title="Contact">
+  <BackgroundContainer
+    color="#747474"
+    imagePath="/bg-contact.png"
+    classNameImage="left-8"
+    styleNameImage="background-position-x: left; background-position-y: center;"
+    bgLayerAnimType=""
+    bgLayerAnimDelay=""
+    bgLayerAnimDuration=""
+    bgImageAnimType="slide-bottom-left"
+    bgImageAnimDelay="0.2"
+  >
+    <ContactForm />
+  </BackgroundContainer>
+  <script type="module" src="/js/page-anim.js"></script>
+</ProtectedPageLayout>

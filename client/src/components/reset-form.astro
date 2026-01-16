@@ -1,0 +1,107 @@
+---
+import Button from "../components/Button.astro";
+import Input from "../components/common/Input-item.astro";
+---
+
+<div id="reset-form" data-anim="fade-in" data-delay="1"
+  class="relative flex flex-col md:flex-row justify-center md:justify-start items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
+>
+  <div
+    class="relative shadow-xl z-10 p-2 md:px-5 md:py-10 w-full max-w-[880px] md:w-full md:max-h-[500px] flex flex-col items-center justify-center bg-[#E9D04FB2]"
+  >
+    <h2
+      class="font-medium drop-shadow-[2px_2px_0px_#00000050] text-display-3 flex flex-wrap md:text-display-2 md:self-start"
+    >
+      <span class="text-[#E20613]">R</span><span class="text-white">e</span
+      ><span class="text-[#E20613]">S</span><span class="text-white"
+        >et&nbsp;
+      </span><span class="text-[#E20613]">P</span><span class="text-white"
+        >ass</span
+      ><span class="text-[#E20613]">W</span><span class="text-white">orD</span>
+    </h2>
+    <div class="bg-[#ffffff] bg-opacity-50 rounded-lg p-2 space-y-6 w-full">
+      <p class="self-start text-black">Enter your new password below.</p>
+      <form class="space-y-6">
+        <Input
+          labelText="New Password:"
+          id="resetPasswordInput"
+          type="password"
+          placeholder="your password..."
+          required={true}
+        />
+        <Input
+          labelText="New Password (Confirmation):"
+          id="resetPasswordConfirmation"
+          type="password"
+          placeholder="your password..."
+          required={true}
+        />
+        <Button id="resetBt" text="RESET" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { resetPassword } from "../services/passwordManage";
+  import { getResetToken } from "../services/sessionstorage";
+  import { clearSessionTimers } from "../services/sessionTimer";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const resetPasswordInput = document.getElementById(
+      "resetPasswordInput"
+    ) as HTMLInputElement;
+    const resetPasswordConfirmation = document.getElementById(
+      "resetPasswordConfirmation"
+    ) as HTMLInputElement;
+    const resetBt = document.getElementById("resetBt") as HTMLElement;
+
+    resetBt.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      if (!resetPasswordInput.value || !resetPasswordConfirmation.value) {
+        alert("Password reset failed: Missing required fields");
+        return;
+      }
+
+      if (resetPasswordConfirmation.value !== resetPasswordInput.value) {
+        alert("Password reset failed: Please make sure your passwords match");
+        return;
+      }
+
+      const resetToken = getResetToken();
+
+      switch (resetToken.type) {
+        case "success":
+          const request = {
+            userId: resetToken.data.userId,
+            resetToken: resetToken.data.token,
+            newPassword: resetPasswordInput.value,
+          };
+
+          const resetPasswordResult = await resetPassword(request);
+          switch (resetPasswordResult.type) {
+            case "success":
+              alert(
+                "Your password has been changed successfully. Please login again."
+              );
+              clearSessionTimers();
+              if (window.navigateWithFade) {
+                window.navigateWithFade("/");
+              } else {
+                window.location.href = "/";
+              }
+              break;
+            case "failure":
+              alert(resetPasswordResult.errorMessage);
+              break;
+          }
+          break;
+
+        case "failure":
+          alert(resetToken.errorMessage);
+          break;
+      }
+    });
+  });
+</script>

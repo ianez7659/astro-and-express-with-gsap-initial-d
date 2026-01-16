@@ -1,0 +1,26 @@
+---
+import Layout from "./layout.astro";
+import { checkAuth } from "../services/authService";
+
+const { title } = Astro.props;
+---
+
+<Layout title={title}>
+  <slot />
+</Layout>
+
+<script>
+  import { checkAuth } from "../services/authService";
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const isAuthenticated = await checkAuth();
+    if (!isAuthenticated) {
+      alert("Please login to access this page");
+      if (window.navigateWithFade) {
+        window.navigateWithFade("/");
+      } else {
+        window.location.href = "/";
+      }
+    }
+  });
+</script>

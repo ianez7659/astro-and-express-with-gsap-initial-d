@@ -1,0 +1,95 @@
+---
+import ProtectedPageLayout from "@/layout/protectedPageLayout.astro";
+import BackgroundContainer from "../components/common/background-container.astro";
+import Button from "../components/Button.astro";
+---
+
+<ProtectedPageLayout title="Dashboard">
+  <BackgroundContainer
+    color="rgb(34, 9, 98)"
+    imagePath="/logo-main.png"
+    classNameImage="left-5"
+    styleNameImage="background-size: 100%; background-position-x: left;"
+    bgLayerAnimDuration=""
+    bgImageAnimType="slide-right"
+    bgImageAnimDelay="0.2"
+  >
+    <div
+      id="dashboard"
+      data-anim="fade-in"
+      data-delay="0.5"
+      class="relative flex flex-col justify-center items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
+    >
+      <div class="relative bg-[#D5E5FFB2] flex flex-col items-center p-8 gap-6 rounded-lg shadow-xl">
+        <h1 class="text-4xl md:text-display-1 font-bold drop-shadow-[3px_3px_0px_rgba(0,0,0,0.8)]">
+          <span class="text-[#E20613]">D</span><span class="text-white">ashboard</span>
+        </h1>
+        <p class="text-white text-lg md:text-xl font-semibold drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)]">
+          Welcome! Choose an option below.
+        </p>
+        <div class="flex flex-col gap-4 mt-4">
+          <button
+            id="go-to-profile"
+            class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/70 text-white md:text-display-2 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+          >
+            Profile
+          </button>
+          <button
+            id="go-to-contact"
+            class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/70 text-white md:text-display-2 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+          >
+            Contact
+          </button>
+          <button
+            id="logout-btn"
+            class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/70 text-white md:text-display-2 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </BackgroundContainer>
+  <script type="module" src="/js/page-anim.js"></script>
+  <script>
+    import { removeLoginInfo } from "../services/sessionstorage";
+    import { clearSessionTimers } from "../services/sessionTimer";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const goToProfileBtn = document.getElementById("go-to-profile");
+      const goToContactBtn = document.getElementById("go-to-contact");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      goToProfileBtn?.addEventListener("click", () => {
+        if (window.navigateWithFade) {
+          window.navigateWithFade("/user");
+        } else {
+          window.location.href = "/user";
+        }
+      });
+
+      goToContactBtn?.addEventListener("click", () => {
+        if (window.navigateWithFade) {
+          window.navigateWithFade("/contact");
+        } else {
+          window.location.href = "/contact";
+        }
+      });
+
+      logoutBtn?.addEventListener("click", async () => {
+        clearSessionTimers();
+        const result = await removeLoginInfo();
+        if (result.success) {
+          if (window.navigateWithFade) {
+            window.navigateWithFade("/");
+          } else {
+            window.location.href = "/";
+          }
+        } else {
+          alert(result.error);
+        }
+      });
+    });
+  </script>
+</ProtectedPageLayout>
+

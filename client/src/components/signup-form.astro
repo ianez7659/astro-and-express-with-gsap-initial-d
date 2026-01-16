@@ -1,0 +1,141 @@
+---
+import Button from "../components/Button.astro";
+import Input from "../components/common/Input-item.astro";
+---
+
+<div id="signup-form" data-anim="fade-in" data-delay="0"
+  class="relative flex flex-col md:flex-row justify-center md:justify-end items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
+>
+  <!-- Back Button -->
+  <button
+    id="back-to-main"
+    class="absolute top-4 left-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition z-20"
+  >
+    ← Back
+  </button>
+
+  <div
+    class="relative shadow-xl z-10 p-2 md:px-5 md:py-10 w-full max-w-[880px] md:w-full md:max-h-[500px] flex flex-col items-center justify-center"
+    style="background-image: linear-gradient(90deg, rgba(115, 115, 115, 0.5) 100%,rgba(221, 221, 221, 0.5) 0%)"
+  >
+    <h2
+      class="font-medium drop-shadow-[2px_2px_0px_#00000050] text-display-3 flex flex-wrap md:text-display-2 md:self-start"
+    >
+      <span class="text-[#E20613]">R</span><span class="text-white">egist</span
+      ><span class="text-[#E20613]">R</span><span class="text-white">ation</span
+      >
+    </h2>
+    <div class="bg-[#ffffff] bg-opacity-50 rounded-lg p-2 space-y-6 w-full">
+      <form class="space-y-6">
+        <Input
+          labelText="User Name"
+          id="inputName"
+          type="text"
+          placeholder="your name..."
+          required={true}
+          labelClassName="text-end"
+        />
+        <Input
+          labelText="Email"
+          id="inputEmail"
+          type="email"
+          placeholder="you@example.com"
+          required={true}
+          labelClassName="text-end"
+        />
+        <Input
+          labelText="Password"
+          id="inputPass"
+          type="password"
+          placeholder="password..."
+          required={true}
+          labelClassName="text-end"
+        />
+        <Button id="signupBt" text="SUBMIT" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { signUp } from "../services/signUp";
+  import { addLoginInfo } from "../services/sessionstorage";
+  import gsap from "gsap";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const backBtn = document.getElementById("back-to-main");
+
+    backBtn?.addEventListener("click", () => {
+      const signupForm = document.getElementById("signup-form");
+      if (signupForm) {
+        gsap.to(signupForm, {
+          opacity: 0,
+          y: -50,
+          duration: 0.6,
+          ease: "power3.in",
+          onComplete: () => {
+            if (window.navigateWithFade) {
+              window.navigateWithFade("/");
+            } else {
+              window.location.href = "/";
+            }
+          },
+        });
+      }
+    });
+
+    const signupBt = document.getElementById("signupBt") as HTMLElement;
+    const inputName = document.getElementById("inputName") as HTMLInputElement;
+    const inputEmail = document.querySelector<HTMLInputElement>(
+      'input[type="email"]'
+    );
+    const inputPass = document.querySelector<HTMLInputElement>(
+      'input[type="password"]'
+    );
+
+    type request = {
+      name: string | null;
+      email: string | null;
+      password: string | null;
+    };
+
+    signupBt?.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const request = {
+        name: inputName?.value,
+        email: inputEmail?.value,
+        password: inputPass?.value,
+      } as request;
+
+      if (!request.name || !request.email || !request.password) {
+        alert("Signup failed: Missing required fields");
+        return;
+      }
+
+      const result = await signUp(request);
+
+      if (result && !result.success) {
+        alert(result.error);
+      } else if (result && result.success) {
+        const sessionResult = await addLoginInfo(
+          result.data.token,
+          result.data.user
+        );
+
+        if (sessionResult && !sessionResult.success) {
+          alert("Couldn't save login information in sessionstorage");
+        } else if (sessionResult && sessionResult.success) {
+          let message = "";
+          message = `${result.data.message}\nuserid: ${result.data.user.id}  email: ${result.data.user.email}`;
+          alert(message);
+          if (window.navigateWithFade) {
+            window.navigateWithFade("/dashboard");
+          } else {
+            window.location.href = "/dashboard";
+          }
+        }
+      }
+    });
+  });
+</script>

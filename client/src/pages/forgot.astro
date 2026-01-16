@@ -1,0 +1,24 @@
+---
+import Layout from "../layout/layout.astro";
+import ForgotForm from "../components/forgot-form.astro";
+import BackgroundContainer from "../components/common/background-container.astro";
+---
+
+<Layout title="Forgot">
+  <BackgroundContainer
+    color="#23AF0D"
+    imagePath="/bg-forget.png"
+    classNameImage="left-5"
+    styleNameImage="background-size: 80%; background-position-x: left;"
+    bgLayerAnimType=""
+    bgLayerAnimDelay=""
+    bgLayerAnimDuration=""
+    bgImageAnimType="slide-bottom-left"
+    bgImageAnimDelay="0.2"
+    
+  >
+    <ForgotForm />
+  </BackgroundContainer>
+  <script type="module" src="/js/page-anim.js"></script>
+
+</Layout>

@@ -1,0 +1,224 @@
+---
+import Button from "../components/Button.astro";
+---
+
+<section
+  id="login-section"
+  class="fixed inset-0 z-40 hidden text-black bg-[length:100%_100%]"
+  style="background-image: linear-gradient(42deg, #E20613 0%, #ffffff 80%, #ffffff 100%);"
+>
+  <!-- Logo -->
+  <img
+    src="/logo-global.png"
+    alt="Initial D Logo"
+    class="absolute top-4 right-4 md:top-8 md:right-10 w-[180px] md:w-[320px] z-50"
+  />
+
+  <div
+    class="relative flex flex-col md:flex-row justify-center md:justify-between items-center min-h-screen w-full px-2 md:px-16 gap-8"
+  >
+    <!-- Back Button -->
+    <button
+      id="back-to-main"
+      class="absolute top-4 left-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+    >
+      ← Back
+    </button>
+
+    <!-- Login Form Container -->
+    <div
+      id="login-form-wrapper"
+      class="relative shadow-xl z-10 p-2 md:px-5 md:py-10 w-full max-w-[880px] md:w-full md:max-h-[500px] flex flex-col items-center justify-center opacity-0 translate-y-4 transition-all duration-700"
+      style="background-image: linear-gradient(90deg, rgba(221, 221, 221, 0.5) 0%, rgba(115, 115, 115, 0.5) 100%)"
+    >
+      <!-- Login Title -->
+      <h2
+        class="absolute top-2 right-6 font-medium drop-shadow-[2px_2px_0px_#00000050] text-display-3 md:text-display-2"
+      >
+        <span class="text-[#E20613]">L</span><span class="text-white">ogin</span
+        >
+      </h2>
+
+      <!-- Login Form -->
+      <div
+        class="bg-[#ffffff] bg-opacity-70 rounded-lg p-2 space-y-6 mt-12 w-full"
+      >
+        <form id="login-form" class="space-y-6">
+          <div>
+            <label class="block font-medium text-body-lg md:text-headline mb-1"
+              >Email:</label
+            >
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              class="w-full p-2 rounded-[10px] border border-black outline-none"
+            />
+          </div>
+          <div>
+            <label class="block font-medium text-body-lg md:text-headline mb-1"
+              >Password:</label
+            >
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="password"
+              class="w-full p-2 rounded-[10px] border border-black outline-none"
+            />
+          </div>
+          <Button type="submit" text="SIGN IN" />
+        </form>
+
+        <!-- Additional Links -->
+        <div
+          class="font-body font-medium md:text-body-lg text-center space-y-1"
+        >
+          <p>
+            <span class="text-black">Forgot</span>
+            <a
+              href="/forgot"
+              id="forgot-link"
+              class="text-[#E20613] hover:underline">Password</a
+            >
+          </p>
+          <p>
+            <span class="text-black">Don’t have an account?</span>
+            <a href="/signup" class="text-green-600 hover:underline">
+              Sign up</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Background Image for Desktop -->
+    <div
+      id="login-bg"
+      class="hidden md:block absolute bottom-0 right-0 w-[900px] h-full pointer-events-none bg-no-repeat bg-contain bg-bottom opacity-0 transition-opacity duration-700"
+      style="background-image: url('/bg-login.png'); background-size: 100%;"
+    >
+    </div>
+  </div>
+
+  <!-- Script Section -->
+  <script>
+    import { handleLogin } from "../services/login";
+    import { addLoginInfo } from "../services/sessionstorage";
+    import gsap from "gsap";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("login-form");
+      const errorBox = document.getElementById("login-error");
+      const backBtn = document.getElementById("back-to-main");
+      const forgotLink = document.getElementById("forgot-link");
+
+      forgotLink?.addEventListener("click", (e) => {
+        e.preventDefault(); // prevent default navigation
+        const loginSection = document.getElementById("login-section");
+
+        gsap.to(loginSection, {
+          opacity: 0,
+          y: -50,
+          duration: 0.5,
+          ease: "power2.inOut",
+          onComplete: () => {
+            if (window.navigateWithFade) {
+              window.navigateWithFade("/forgot");
+            } else {
+              window.location.href = "/forgot";
+            }
+          },
+        });
+      });
+
+      backBtn?.addEventListener("click", () => {
+        const loginSection = document.getElementById("login-section");
+        if (loginSection) {
+          gsap.to(loginSection, {
+            opacity: 0,
+            y: -50,
+            duration: 0.6,
+            ease: "power3.in",
+            onComplete: () => {
+              loginSection.classList.add("hidden");
+
+              const mainUI = document.getElementById("main-ui");
+              const logo = document.getElementById("logo");
+              const buttons = document.getElementById("buttons");
+
+              gsap.set(mainUI, { opacity: 1 });
+
+              gsap.fromTo(
+                logo,
+                { opacity: 0, y: -20 },
+                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+              );
+
+              gsap.fromTo(
+                buttons,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+              );
+
+              // Play main screen audio
+              if (window.playAudio) {
+                window.playAudio("/audio/initiald-eyecatch-1.mp4");
+              }
+            },
+          });
+        }
+      });
+
+      form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const emailInput = form?.querySelector('input[name="email"]');
+        const passwordInput = form?.querySelector('input[name="password"]');
+
+        if (
+          emailInput instanceof HTMLInputElement &&
+          passwordInput instanceof HTMLInputElement
+        ) {
+          const email = emailInput.value;
+          const password = passwordInput.value;
+
+          try {
+            const data = await handleLogin(email, password);
+            const result = await addLoginInfo(data.token, {
+              ...data.user,
+              createdAt: "",
+            });
+            if (result.success) {
+              if (window.playAudio) {
+                window.playAudio("/audio/initiald-eyecatch-1.mp4");
+              }
+              alert(data.message);
+              if (window.navigateWithFade) {
+                window.navigateWithFade("/dashboard");
+              } else {
+                window.location.href = "/dashboard";
+              }
+              return;
+            } else {
+              alert(result.error);
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+            let message = "Something went wrong.";
+            if (error instanceof Error) {
+              message = error.message;
+            }
+            if (errorBox) {
+              errorBox.textContent = message;
+              errorBox.style.display = "block";
+            } else {
+              alert(message);
+            }
+          }
+        }
+      });
+    });
+  </script>
+</section>

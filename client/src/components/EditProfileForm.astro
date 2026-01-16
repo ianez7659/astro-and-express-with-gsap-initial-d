@@ -1,0 +1,368 @@
+---
+import InputItem from "@/components/common/Input-item.astro";
+type FormField = {
+  labelText: string;
+  name: string;
+  className: string;
+  containerClass: string;
+};
+
+const commonInputStyle =
+  "w-[319px] h-[24px] md:w-[380px] md:h-[32px] bg-[#D9D9D9] text-black font-[Orbitron] font-bold text-[16px] border-none text-right";
+const commonContainerStyle =
+  "bg-white w-[350px] h-[70px] md:w-[410px] md:h-[100px] px-[20px] py-[24px] rounded-[20px] flex flex-col justify-center items-center";
+
+const wideInputStyle =
+  "w-[319px] h-[24px] md:w-[840px] md:h-[32px] bg-[#D9D9D9] text-black font-[Orbitron] font-bold text-[16px] border-none text-right";
+const wideContainerStyle =
+  "bg-white w-[350px] h-[70px] md:w-[870px] md:h-[100px] px-[20px] py-[24px] rounded-[20px] flex flex-col justify-center items-center";
+
+const tallInputStyle =
+  "w-[319px] h-[44px] md:w-[840px] md:h-[32px] bg-[#D9D9D9] text-black font-[Orbitron] font-bold text-[16px] border-none text-right";
+const tallContainerStyle =
+  "bg-white w-[350px] h-[91px] md:w-[870px] md:h-[100px] px-[20px] py-[24px] rounded-[20px] flex flex-col justify-center items-center";
+
+const formFields: FormField[] = [
+  {
+    labelText: "First Name",
+    name: "firstName",
+    className: commonInputStyle,
+    containerClass: commonContainerStyle,
+  },
+  {
+    labelText: "Last Name",
+    name: "lastName",
+    className: commonInputStyle,
+    containerClass: commonContainerStyle,
+  },
+  {
+    labelText: "User Name",
+    name: "name",
+    className: commonInputStyle,
+    containerClass: commonContainerStyle,
+  },
+  {
+    labelText: "Phone Number",
+    name: "phone",
+    className: commonInputStyle,
+    containerClass: commonContainerStyle,
+  },
+  {
+    labelText: "Email Address",
+    name: "email",
+    className: wideInputStyle,
+    containerClass: wideContainerStyle,
+  },
+  {
+    labelText: "Address",
+    name: "address",
+    className: tallInputStyle,
+    containerClass: tallContainerStyle,
+  },
+];
+---
+
+<!-- Dashboard Button -->
+<button
+  id="dashboard-button"
+  type="button"
+  class="absolute top-4 left-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition z-50"
+>
+  ← Dashboard
+</button>
+
+<!-- Top Section: Avatar + Username & Buttons -->
+<div
+  id="forgot-form"
+  data-anim="zoom-out"
+  data-delay="0.5"
+  data-duration="1"
+  class="relative flex flex-col justify-center items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
+>
+  <div class="relative bg-[#D5E5FFB2] flex flex-col items-center justify-center p-8 gap-4 rounded-lg shadow-xl md:max-w-[980px] z-10">
+    <div
+      class="w-[393px] h-auto flex flex-col md:w-[900px] md:h-[200px] md:flex-row md:items-start md:px-[10px]"
+    >
+      <!-- Avatar -->
+      <div
+        class="w-[393px] h-[100px] md:w-[230px] md:h-[200px] flex justify-center items-center bg-[#FFFDFD80]/50"
+      >
+        <img
+          id="avatar-preview"
+          src="/Profile-Photo.png"
+          alt="Profile"
+          class="w-[100px] h-[100px] bg-white border-none rounded-full object-cover"
+        />
+      </div>
+
+      <!-- Username + Buttons -->
+      <div
+        class="w-[393px] h-auto md:w-[670px] md:h-[200px] flex flex-col justify-center items-center md:items-start gap-[10px] bg-[#d62929]/70 border-t border-white md:border-none md:pt-[60px] md:pb-[60px] py-2"
+      >
+        <h2
+          id="username-display"
+          class="text-[32px] md:text-[64px] font-[800] text-white font-[Orbitron] text-center leading-[40px] md:leading-[80px] drop-shadow-[2px_2px_0px_black] w-[393px] md:w-[640px]"
+        >
+          {Astro.props.profileData?.name}
+        </h2>
+        <div class="flex flex-row flex-wrap justify-center gap-2 w-full px-2">
+          <form id="image-upload-form">
+            <label
+              for="imageInput"
+              class="w-[120px] h-[36px] bg-[#e20613] text-white text-[22px] font-bold font-[Orbitron] rounded-[20px] border-[2px] border-white flex justify-center items-center cursor-pointer"
+            >
+              Image
+            </label>
+            <input
+              type="file"
+              id="imageInput"
+              name="image"
+              class="hidden"
+              accept="image/*"
+            />
+          </form>
+          <button
+            id="edit-button"
+            type="button"
+            class="w-[120px] h-[36px] bg-[#e20613] text-white text-[22px] font-bold font-[Orbitron] rounded-[20px] border-[2px] border-white flex justify-center items-center cursor-pointer"
+          >
+            Edit
+          </button>
+          <button
+            id="save-button"
+            type="submit"
+            class="w-[120px] h-[36px] bg-[#e20613] text-white text-[22px] font-bold font-[Orbitron] rounded-[20px] border-[2px] border-white flex justify-center items-center cursor-pointer"
+            style="display: none;"
+            form="profile-form"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Form -->
+    <form
+      id="profile-form"
+      class="w-full h-full flex flex-col items-center gap-4 px-4 py-4"
+      style="background-color: #D5E5FFB2;"
+      method="post"
+    >
+      <div
+        class="w-[369px] border-white border-4 bg-[#FFFDFD80] flex flex-col pt-1 pb-10 gap-3 px-[10px]
+              md:w-[900px] md:h-[550px] md:flex-row md:flex-wrap md:justify-between md:items-start"
+      >
+        {
+          formFields.map((field) => (
+            <div class={field.containerClass}>
+              <InputItem
+                labelText={field.labelText}
+                name={field.name}
+                className={field.className}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  import {
+    updateProfilePicture,
+    updateProfile,
+    getUser,
+  } from "../services/userService";
+  import { BASE_URL } from "../util/constants";
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const editButton = document.getElementById("edit-button");
+    const dashboardButton = document.getElementById("dashboard-button");
+    const imageInput = document.getElementById(
+      "imageInput"
+    ) as HTMLInputElement;
+    const imageForm = document.getElementById(
+      "image-upload-form"
+    ) as HTMLFormElement;
+    const profileForm = document.getElementById(
+      "profile-form"
+    ) as HTMLFormElement;
+    const inputs = profileForm.querySelectorAll("input, textarea");
+    const saveButton = document.getElementById(
+      "save-button"
+    ) as HTMLButtonElement;
+
+    const avatarImg = document.getElementById(
+      "avatar-preview"
+    ) as HTMLImageElement;
+
+    if (
+      !editButton ||
+      !dashboardButton ||
+      !imageInput ||
+      !imageForm ||
+      !profileForm ||
+      !saveButton ||
+      !avatarImg
+    ) {
+      console.error("Required elements not found");
+      return;
+    }
+
+    // Initially disable all inputs
+    inputs.forEach((input) => {
+      (input as HTMLInputElement).disabled = true;
+      input.classList.add("text-gray-500");
+    });
+    saveButton.style.display = "none";
+
+    // Get user data
+    const userResponse = await getUser(
+      window.sessionStorage.getItem("userToken") as string
+    );
+    const user = userResponse.user;
+    // console.log("user", user);
+    if (user.profilePic) {
+      // Check if it's a base64 string or a URL path
+      if (user.profilePic.startsWith('data:image')) {
+        avatarImg.src = user.profilePic;
+      } else {
+        avatarImg.src = `${BASE_URL}${user.profilePic}`;
+      }
+    }
+    // Update form fields with user data
+    const formFields = document.querySelectorAll("input[name]");
+    formFields.forEach((field) => {
+      const input = field as HTMLInputElement;
+      const fieldName = input.name;
+      if (user[fieldName as keyof typeof user]) {
+        input.value = user[fieldName as keyof typeof user] as string;
+      }
+    });
+
+    const usernameDisplay = document.getElementById("username-display");
+    if (usernameDisplay && user.name) {
+      usernameDisplay.textContent = user.name;
+    }
+
+    // Enable edit mode
+    editButton.addEventListener("click", () => {
+      inputs.forEach((input) => {
+        (input as HTMLInputElement).disabled = false;
+        input.classList.remove("text-gray-500");
+      });
+      saveButton.style.display = "block";
+    });
+
+    dashboardButton.addEventListener("click", () => {
+      if (window.navigateWithFade) {
+        window.navigateWithFade("/dashboard");
+      } else {
+        window.location.href = "/dashboard";
+      }
+    });
+
+    // Handle image upload
+    imageForm.addEventListener("change", async (e) => {
+      e.preventDefault();
+      const file = imageInput.files?.[0];
+      if (!file) return alert("Please select an image.");
+
+      try {
+        const token = window.sessionStorage.getItem("userToken");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const data = await updateProfilePicture(file, token);
+
+        if (data.profilePic) {
+          // Check if it's a base64 string or a URL path
+          if (data.profilePic.startsWith('data:image')) {
+            avatarImg.src = data.profilePic;
+          } else {
+            avatarImg.src = `${BASE_URL}${data.profilePic}`;
+          }
+        }
+
+        alert("Image uploaded successfully!");
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "An error occurred");
+      }
+    });
+
+    // Handle profile form submission
+    profileForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const requiredFields = [
+        "firstName",
+        "lastName",
+        "name",
+        "phone",
+        "email",
+        "address",
+      ];
+      const hasEmpty = requiredFields.some((id) => {
+        const el = document.getElementsByName(id)[0] as HTMLInputElement;
+        return !el || el.value.trim() === "";
+      });
+
+      if (hasEmpty) {
+        alert("Please fill in all fields before saving.");
+        return;
+      }
+
+      try {
+        const token = window.sessionStorage.getItem("userToken");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const profileData = {
+          firstName: (
+            profileForm.elements.namedItem("firstName") as HTMLInputElement
+          ).value,
+          lastName: (
+            profileForm.elements.namedItem("lastName") as HTMLInputElement
+          ).value,
+          name: (profileForm.elements.namedItem("name") as HTMLInputElement)
+            .value,
+          phone: (profileForm.elements.namedItem("phone") as HTMLInputElement)
+            .value,
+          email: (profileForm.elements.namedItem("email") as HTMLInputElement)
+            .value,
+          address: (
+            profileForm.elements.namedItem("address") as HTMLInputElement
+          ).value,
+        };
+
+        await updateProfile(profileData, token);
+
+        const usernameDisplay = document.getElementById("username-display");
+        if (usernameDisplay) {
+          usernameDisplay.textContent = profileData.name;
+        }
+
+        inputs.forEach((input) => {
+          (input as HTMLInputElement).disabled = true;
+          input.classList.add("text-gray-500");
+        });
+        saveButton.style.display = "none";
+        const audips = [
+          "/audio/initiald-eyecatch-1.mp4",
+          "/audio/initiald-eyecatch-2.mp3",
+          "/audio/initiald-eyecatch-3.mp3"
+        ]
+        const randomAudio = audips[Math.floor(Math.random() * audips.length)];
+        if (window.playAudio) {
+          window.playAudio(randomAudio);
+        }
+
+        alert("Profile updated!");
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "An error occurred");
+      }
+    });
+  });
+</script>

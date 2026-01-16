@@ -1,0 +1,41 @@
+---
+// Input-item.astro
+export interface Props {
+  labelText?: string;
+  type?: "text" | "email" | "password" | "tel";
+  id?: string;
+  name?: string;
+  required?: boolean;
+  placeholder?: string;
+  labelClassName?: string;
+  className?: string;
+  value?: string;
+}
+
+const {
+  labelText = "",
+  type = "text",
+  id = "",
+  name = "",
+  required = false,
+  placeholder = "",
+  labelClassName = "",  
+  className = "",
+  value = "",
+} = Astro.props;
+---
+
+
+<div>
+<label class={`block font-medium text-body-lg md:text-headline mb-1 font-[orbitron] ${labelClassName}`}>
+  {labelText}
+</label>
+  <input
+    type={type}
+    id={id}
+    name={name}
+    {required}
+  class=`w-full p-2 rounded-[10px] border border-black outline-none ${className}`
+/>
+  
+</div>

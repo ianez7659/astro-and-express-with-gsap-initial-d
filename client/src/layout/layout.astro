@@ -1,0 +1,49 @@
+---
+import "../styles/global.css";
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <script type="module" src="/js/page-transition.js"></script>
+    <script>
+      // Global audio manager to prevent overlapping audio
+      window.currentAudio = null;
+      
+      window.playAudio = function(src) {
+        // Stop current audio if playing
+        if (window.currentAudio) {
+          window.currentAudio.pause();
+          window.currentAudio.currentTime = 0;
+        }
+        
+        // Play new audio
+        window.currentAudio = new Audio(src);
+        window.currentAudio.play().catch((error) => {
+          console.error("failed to play audio:", error);
+        });
+      };
+      
+      window.stopAudio = function() {
+        if (window.currentAudio) {
+          window.currentAudio.pause();
+          window.currentAudio.currentTime = 0;
+          window.currentAudio = null;
+        }
+      };
+    </script>
+  </body>
+</html>

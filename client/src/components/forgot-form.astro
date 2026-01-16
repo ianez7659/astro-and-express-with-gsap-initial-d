@@ -1,0 +1,82 @@
+---
+import Button from "../components/Button.astro";
+import Input from "../components/common/Input-item.astro";
+---
+
+<div id="forgot-form" data-anim="fade-in" data-delay="0"
+  class="relative opacity-0 translate-y-4 flex flex-col md:flex-row justify-center md:justify-end items-center min-h-screen w-full px-2 md:px-16 gap-8"
+>
+  <div
+    class="relative shadow-xl z-10 p-2 md:px-5 md:py-10 w-full max-w-[880px] md:w-full md:max-h-[500px] flex flex-col items-center justify-center bg-[#818CC8CC]"
+  >
+    <h2
+      class="font-medium drop-shadow-[2px_2px_0px_#00000050] text-display-3 flex flex-wrap md:text-display-2 md:self-start"
+    >
+      <span class="text-[#E20613]">F</span><span class="text-white">or</span
+      ><span class="text-[#E20613]">G</span><span class="text-white">et</span
+      ><span class="text-[#E20613]">P</span><span class="text-white">ass</span
+      ><span class="text-[#E20613]">W</span><span class="text-white">ord</span>
+    </h2>
+    <div class="bg-[#ffffff] bg-opacity-50 rounded-lg p-2 space-y-6 w-full">
+      <p class="self-start text-black">
+        Please, enter your email address to receive a reset password link though
+        your email.
+      </p>
+      <form class="space-y-6">
+        <Input
+          labelText="Email:"
+          id="resetEmailInput"
+          type="email"
+          placeholder="you@example.com"
+          required={true}
+        />
+        <Button id="forgotBt" text="SUBMIT" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { forgotPassword } from "../services/passwordManage";
+  import { setResetToken } from "../services/sessionstorage";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const resetEmailInput = document.getElementById(
+      "resetEmailInput"
+    ) as HTMLInputElement;
+    const forgotBt = document.getElementById("forgotBt") as HTMLElement;
+
+    forgotBt.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = resetEmailInput.value;
+      const forgotPasswordResult = await forgotPassword(email);
+
+      switch (forgotPasswordResult.type) {
+        case "success":
+          if (!forgotPasswordResult.resetToken) {
+            alert(forgotPasswordResult.message);
+            return;
+          }
+          const request = forgotPasswordResult.resetToken;
+          const setResetTokenResult = setResetToken(request);
+
+          if (setResetTokenResult && !setResetTokenResult.success) {
+            console.log("Couldn't save resetToken in sessionstorage");
+            alert("Failed to forget password");
+          } else if (setResetTokenResult && setResetTokenResult.success) {
+            alert("Forgot password successfully");
+            if (window.navigateWithFade) {
+              window.navigateWithFade("/reset");
+            } else {
+              window.location.href = "/reset";
+            }
+          }
+          break;
+
+        case "failure":
+          alert(forgotPasswordResult.errorMessage);
+          break;
+      }
+    });
+  });
+</script>

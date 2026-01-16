@@ -1,0 +1,153 @@
+---
+import Button from "../components/Button.astro";
+import Input from "../components/common/Input-item.astro";
+---
+
+<div id="contact-form" data-anim="fade-in" data-delay="0.5"
+  class="relative flex flex-col md:flex-row justify-center items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
+>
+  <!-- Back Button -->
+  <button
+    id="back-to-main"
+    class="absolute top-4 left-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+  >
+    ← Dashboard
+  </button>
+
+  <div
+    class="relative shadow-xl z-10 p-2 md:px-5 md:py-10 w-full max-w-[880px] md:w-full flex flex-col top-[70px] items-center justify-center"
+    style="background-image: linear-gradient(90deg, rgba(204, 51, 95,0.5) 0%, rgba(108, 37, 153, 0.5) 100%)"
+  >
+    <h2
+      class="font-medium drop-shadow-[2px_2px_0px_#00000050] text-display-3 flex flex-wrap md:text-display-2 md:self-start"
+    >
+      <span class="text-[#E20613]">C</span><span class="text-white">ontact</span
+      >
+    </h2>
+    <div class="bg-[#ffffff] bg-opacity-50 rounded-lg p-2 space-y-6 w-full">
+      <form class="space-y-6">
+        <Input
+          labelText="User Name"
+          id="contactName"
+          type="text"
+          placeholder="your name..."
+          required={true}
+        />
+        <Input
+          labelText="Email"
+          id="contactEmail"
+          type="email"
+          placeholder="you@example.com"
+          required={true}
+        />
+        <Input
+          labelText="Phone"
+          id="contactPhone"
+          type="tel"
+          placeholder="phone number..."
+          required={true}
+        />
+        <Input
+          labelText="Message"
+          id="contactMessage"
+          type="text"
+          placeholder="message..."
+          required={true}
+        />
+        <Button id="contactBt" text="SUBMIT" />
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  import { submitContact } from "../services/contact";
+  import { getLatestToken } from "../services/sessionstorage";
+  import gsap from "gsap";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const backBtn = document.getElementById("back-to-main");
+
+    backBtn?.addEventListener("click", () => {
+      const contactForm = document.querySelector(".relative.flex.flex-col");
+      if (contactForm) {
+        gsap.to(contactForm, {
+          opacity: 0,
+          y: -50,
+          duration: 0.6,
+          ease: "power3.in",
+          onComplete: () => {
+            if (window.navigateWithFade) {
+              window.navigateWithFade("/dashboard");
+            } else {
+              window.location.href = "/dashboard";
+            }
+          },
+        });
+      }
+    });
+
+    const contactBt = document.getElementById("contactBt") as HTMLElement;
+    const contactName = document.getElementById(
+      "contactName"
+    ) as HTMLInputElement;
+    const contactEmail = document.getElementById(
+      "contactEmail"
+    ) as HTMLInputElement;
+    const contactPhone = document.getElementById(
+      "contactPhone"
+    ) as HTMLInputElement;
+    const contactMessage = document.getElementById(
+      "contactMessage"
+    ) as HTMLInputElement;
+
+    type request = {
+      name: string;
+      email: string;
+      phone: string;
+      message: string;
+    };
+
+    contactBt.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const request = {
+        name: contactName?.value,
+        email: contactEmail?.value,
+        phone: contactPhone?.value,
+        message: contactMessage?.value,
+      } as request;
+
+      if (
+        !request.name ||
+        !request.email ||
+        !request.phone ||
+        !request.message
+      ) {
+        alert("All fields are required");
+        return;
+      }
+      const tokenResponse = await getLatestToken();
+      const token = tokenResponse.data;
+
+      if (token) {
+        const result = await submitContact(token, request);
+
+        switch (result.type) {
+          case "success":
+            alert(`${result.message}<br/>${result.submittedAt}`);
+            break;
+          case "failure":
+            alert(`${result.errorMessage}`);
+            break;
+        }
+      } else {
+        alert("The login process has failed. Please try logging in again.");
+        if (window.navigateWithFade) {
+          window.navigateWithFade("/login");
+        } else {
+          window.location.href = "/login";
+        }
+      }
+    });
+  });
+</script>

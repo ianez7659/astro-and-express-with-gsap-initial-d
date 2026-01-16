@@ -1,0 +1,371 @@
+---
+import Layout from "../layout/layout.astro";
+import LoginSection from "../components/LoginSection.astro";
+---
+
+<Layout title="Home">
+  <main class="relative h-screen w-screen">
+    <div
+      id="intro-screen"
+      class="fixed inset-0 bg-black z-[9999] flex items-center justify-center"
+    >
+      <div
+        id="intro-texts"
+        class="relative w-full h-full flex items-center justify-center"
+      >
+        <h1
+          class="intro-line text-3xl md:text-4xl font-medium absolute opacity-0 flex gap-2"
+        >
+          <span class="text-white">PROJECT</span>
+          <span class="text-[#E20613] text-5xl md:text-8xl font-bold"
+            >INITIAL</span
+          >
+          <span class="text-white text-5xl md:text-8xl">D</span>
+        </h1>
+        <h1
+          class="intro-line text-white text-3xl md:text-6xl font-bold absolute opacity-0"
+        >
+          You are the One...
+        </h1>
+        <h1
+          class="intro-line text-white text-center text-3xl md:text-6xl font-bold absolute opacity-0"
+        >
+          who challenge them all.
+        </h1>
+        <h1
+          class="intro-line text-[#E20613] text-6xl md:text-[200px] font-extrabold absolute opacity-0"
+        >
+          INITIAL<span
+            class="text-white text-8xl md:text-[300px] italic font-extrabold"
+            >D</span
+          >
+        </h1>
+      </div>
+      <div
+        id="light-dots"
+        class="absolute top-[50%] left-[10%] transform -translate-y-1/2 flex gap-20 md:gap-[200px] opacity-0 z-[9999] pointer-events-none"
+        style="width: max-content;"
+      >
+        <div
+          class="light-dot w-[60px] h-12 md:w-[80px] md:h-14 rounded-full bg-white shadow-[0_0_30px_10px_white]"
+        >
+        </div>
+        <div
+          class="light-dot w-8 h-6 md:w-10 md:h-8 rounded-full bg-white shadow-[0_0_30px_10px_white] translate-y-14"
+        >
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="white-flash"
+      class="fixed inset-0 bg-white opacity-0 z-[99999] pointer-events-none"
+    >
+    </div>
+
+    <div
+      id="bg-image"
+      class="absolute inset-0 bg-no-repeat bg-center bg-black z-0 opacity-0 sm:bg-cover"
+      style="background-image: url('/bg-main-desktop.jpg'); background-size: 150%;"
+    >
+    </div>
+
+    <div class="absolute inset-0 bg-black/0 z-10"></div>
+
+    <div
+      id="main-ui"
+      class="absolute inset-0 z-20 flex flex-col justify-between px-0 md:px-6 py-6 opacity-0"
+    >
+      <div class="flex justify-center md:justify-end px-0 mt-11 md:mt-0 mx-0">
+        <img
+          id="logo"
+          src="/logo-main.png"
+          alt="Initial D Logo"
+          class="w-[450px] md:w-[590px] opacity-0"
+        />
+      </div>
+
+      <div
+        id="buttons"
+        class="flex flex-col items-center justify-center flex-grow space-y-6 opacity-0"
+      >
+        <button
+          id="show-login"
+          class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/30 text-white/50 md:text-display-1 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+          >LOGIN</button
+        >
+        <a
+          href="/signup"
+          class="w-[320px] md:w-[500px] md:h-[100px] bg-[#ff0000]/30 text-white/50 text-display-3 md:text-display-1 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white flex items-center justify-center text-center"
+          >REGISTER</a
+        >
+      </div>
+
+      <LoginSection />
+    </div>
+  </main>
+
+  <script>
+    import gsap from "gsap";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const introScreen = document.getElementById("intro-screen");
+      const lines = document.querySelectorAll(".intro-line");
+      const lightDots = document.getElementById("light-dots");
+      const stopX = window.innerWidth * 0.4;
+
+      if (!introScreen || lines.length === 0) return;
+      document.body.classList.add("overflow-hidden");
+
+      const tl = gsap.timeline();
+      let animationSkipped = false;
+
+      lines.forEach((line, i) => {
+        const isLast = i === lines.length - 1;
+
+        if (i === 0) {
+          const words = line.querySelectorAll("span");
+          tl.set(line, { opacity: 1 });
+          tl.fromTo(
+            words,
+            { opacity: 0, scale: 1.5, filter: "blur(220px)" },
+            {
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              duration: 2,
+              ease: "expo.out",
+            },
+            "<"
+          );
+          return;
+        }
+
+        if (!isLast) {
+          const text = line.textContent?.trim() || "";
+          line.innerHTML = "";
+          text.split("").forEach((char) => {
+            const span = document.createElement("span");
+            span.className = "char inline-block opacity-0 translate-y-4";
+            span.textContent = char === " " ? "\u00A0" : char;
+            line.appendChild(span);
+          });
+        }
+      });
+
+      lines.forEach((line, i) => {
+        const isLast = i === lines.length - 1;
+
+        if (!isLast) {
+          const chars = line.querySelectorAll(".char");
+          tl.set(line, { opacity: 1 });
+          tl.to(chars, {
+            opacity: 1,
+            stagger: 0.05,
+            duration: 0.5,
+            ease: "back.out(1.7)",
+          });
+          tl.to({}, { duration: 0.2 });
+          tl.to(line, {
+            opacity: 0,
+            scale: 1.2,
+            duration: 1.2,
+            filter: "blur(20px)",
+            ease: "power2.inOut",
+          });
+        } else {
+          tl.set(line, { opacity: 1 });
+          tl.to(
+            "#intro-screen",
+            {
+              backgroundColor: "#ddd",
+              repeat: 3,
+              yoyo: true,
+              duration: 0.051,
+              ease: "none",
+            },
+            "<"
+          );
+          tl.fromTo(
+            line,
+            { opacity: 0, scale: 1.2, x: -50, filter: "blur(120px)" },
+            {
+              opacity: 1,
+              scale: 1,
+              x: 0,
+              filter: "blur(0px)",
+              duration: 3,
+              ease: "expo.out",
+            },
+            "<"
+          );
+          tl.to({}, { duration: 0.5 });
+          tl.to(line, {
+            opacity: 0,
+            scale: 1.2,
+            filter: "blur(50px)",
+            duration: 0.6,
+            ease: "power2.inOut",
+          });
+        }
+      });
+
+      const lightDotEls = document.querySelectorAll(".light-dot");
+      if (lightDotEls.length > 0) {
+        tl.fromTo(
+          Array.from(lightDotEls),
+          {
+            scale: 1,
+          },
+          {
+            scale: 1.4,
+            duration: 0.01,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+          },
+          "<"
+        );
+      }
+
+      if (lightDots) {
+        tl.to(
+          "#light-dots",
+          {
+            x: stopX,
+            y: 8,
+            opacity: 1,
+            scale: 1.8,
+            duration: 1.4,
+            ease: "power2.inOut",
+          },
+          "-=0.7"
+        );
+      }
+
+      tl.to(
+        "#white-flash",
+        { opacity: 1, duration: 0.4, ease: "power2.out" },
+        "-=0.6"
+      );
+      tl.set("#intro-screen", { display: "none" });
+      tl.set("#bg-image", { opacity: 1 });
+      tl.to({}, { duration: 0.5 });
+      tl.to("#white-flash", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.inOut",
+      });
+      tl.to({}, { duration: 1 });
+      tl.to("#main-ui", { opacity: 1 });
+	  
+
+      tl.fromTo(
+        "#logo",
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+      );
+      tl.fromTo(
+        "#buttons",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        "<+0.2"
+      );
+      tl.to({}, { duration: 0.2 });
+      tl.set(introScreen, { display: "none" });
+      tl.call(() => {
+        introScreen.remove();
+        document.body.classList.remove("overflow-hidden");
+      });
+      tl.call(() => {
+        if (window.playAudio) {
+          window.playAudio("/audio/initiald-eyecatch-1.mp4");
+        }
+      });
+
+      introScreen.addEventListener("click", () => {
+        if (animationSkipped) return;
+        if (window.playAudio) {
+          window.playAudio("/audio/initiald-eyecatch-1.mp4");
+        }
+        animationSkipped = true;
+        tl.kill();
+        lines.forEach((line) => {
+          (line as HTMLElement).style.opacity = "0";
+        });
+        gsap.set("#white-flash", { opacity: 0 });
+        gsap.set("#bg-image", { opacity: 1 });
+        gsap.set("#main-ui", { opacity: 1 });
+        gsap.set("#logo", { opacity: 1, y: 0 });
+        gsap.set("#buttons", { opacity: 1, y: 0 });
+        gsap.to(introScreen, {
+          opacity: 0,
+          duration: 0.5,
+          onComplete: () => {
+            introScreen.remove();
+            document.body.classList.remove("overflow-hidden");
+          },
+        });
+      });
+
+      const btn = document.getElementById("show-login");
+      const loginSection = document.getElementById("login-section");
+      let isLoginVisible = false;
+
+      btn?.addEventListener("click", () => {
+         if (!loginSection) return;
+         if (window.playAudio) {
+           window.playAudio("/audio/initiald-eyecatch-3.mp3");
+         }
+
+        if (!isLoginVisible) {
+          loginSection.classList.remove("hidden");
+          gsap.fromTo(
+            loginSection,
+            { opacity: 0, y: -50 },
+            { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+          );
+          isLoginVisible = true;
+
+          const loginBg = document.getElementById("login-bg");
+          const loginForm = document.getElementById("login-form-wrapper");
+
+          if (loginBg && loginForm) {
+            requestAnimationFrame(() => {
+              const loginTl = gsap.timeline();
+              loginTl.fromTo(
+                loginBg,
+                { autoAlpha: 0, x: 450 },
+                { autoAlpha: 1, x: 0, duration: 0.5, ease: "back.out(1.7)" },
+                0
+              );
+              loginTl.fromTo(
+                loginForm,
+                { autoAlpha: 0, x: 0 },
+                { autoAlpha: 1, x: 0, duration: 1, ease: "back.out(1.7)" },
+                0
+              );
+            });
+          }
+        } else {
+          gsap.to(loginSection, {
+            opacity: 0,
+            y: -50,
+            duration: 0.6,
+            ease: "power3.in",
+            onComplete: () => {
+              loginSection.classList.add("hidden");
+              isLoginVisible = false;
+            },
+          });
+        }
+      });
+
+      // Reset isLoginVisible when back button is clicked
+      const backBtn = document.getElementById("back-to-main");
+      backBtn?.addEventListener("click", () => {
+        isLoginVisible = false;
+      });
+    });
+  </script>
+</Layout>

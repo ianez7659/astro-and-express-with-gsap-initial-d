@@ -1,0 +1,64 @@
+---
+import LogoImage from "./logo-image.astro";
+
+export interface Props {
+  color?: string;
+  imagePath?: string;
+  classNameImage?: string;
+  styleNameImage?: string;
+  classNameDiv?: string;
+  bgLayerAnimType?: string;
+  bgLayerAnimDelay?: string;
+  bgLayerAnimDuration?: string;
+  bgImageAnimType?: string;
+  bgImageAnimDelay?: string;
+  bgImageAnimDuration?: string;
+}
+
+const {
+  color = "",
+  imagePath = "",
+  classNameImage = "",
+  styleNameImage = "",
+  classNameDiv = "",
+  bgLayerAnimType = "",
+  bgLayerAnimDelay = "",
+  bgLayerAnimDuration = "",
+  bgImageAnimType = "",
+  bgImageAnimDelay = "",
+  bgImageAnimDuration = "",
+} = Astro.props;
+---
+
+<div
+  id="background-container"
+  class={`relative min-h-screen w-full overflow-hidden ${classNameDiv}`}
+>
+  <!-- Background Layer -->
+  <div
+    id="bg-layer"
+    class="absolute inset-0 z-0"
+    style={`background-image: linear-gradient(42deg, ${color} 0%, #ffffff 80%, #ffffff 100%);`}
+    data-anim={bgLayerAnimType}
+    data-delay={bgLayerAnimDelay}
+    data-duration={bgLayerAnimDuration}
+  ></div>
+
+  <!-- Optional background image -->
+  {imagePath && (
+    <div
+      id="bg-inner-image"
+      class={`hidden md:block absolute bottom-0 ${classNameImage} w-[900px] h-full pointer-events-none bg-no-repeat bg-contain bg-bottom z-0`}
+      style={`background-image: url('${imagePath}'); background-size: 100%; opacity: 0; visibility: hidden; ${styleNameImage}`}
+      data-anim={bgImageAnimType}
+      data-delay={bgImageAnimDelay}
+      data-duration={bgImageAnimDuration}
+    ></div>
+  )}
+
+  <!-- Logo and Content -->
+  <div class="relative z-10">
+    <LogoImage />
+    <slot />
+  </div>
+</div>

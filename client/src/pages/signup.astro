@@ -1,0 +1,23 @@
+---
+import SignUp from "../components/signup-form.astro";
+import Layout from "../layout/layout.astro";
+import SessionDialog from "../components/session-timeout-dialog.astro";
+import BackgroundContainer from "../components/common/background-container.astro";
+---
+
+<Layout title="Signup">
+  <BackgroundContainer
+    color="#0A426A"
+    imagePath="/bg-signup-Image.png"
+    classNameImage="left-5"
+    styleNameImage="background-size: 40%; background-position-x: left;"
+    bgLayerAnimType=""
+    bgLayerAnimDelay=""
+    bgLayerAnimDuration=""
+    bgImageAnimType="slide-bottom-left"
+    bgImageAnimDelay="0.2"    
+  >
+    <SignUp />
+  </BackgroundContainer>
+  <script type="module" src="/js/page-anim.js"></script>
+</Layout>
