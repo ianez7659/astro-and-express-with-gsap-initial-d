@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const app = express();
-const JWT_SECRET = "my-secret-jwt-secret";
+const JWT_SECRET = process.env.JWT_SECRET || "my-secret-jwt-secret";
 const TOKEN_EXPIRY = "1h";
 
 app.use(cors());
