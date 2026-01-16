@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const app = express();
-const JWT_SECRET = process.env.JWT_SECRET || "my-secret-jwt-secret";
+// JWT_SECRET: Use environment variable, fallback to default for local development only
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-key-change-in-production";
 const TOKEN_EXPIRY = "1h";
 
 app.use(cors());
