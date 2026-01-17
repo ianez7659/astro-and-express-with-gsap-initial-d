@@ -4,6 +4,12 @@ import { BASE_URL } from "../util/constants";
 export async function validateToken() {
   try {
     const token = await getLatestToken();
+    
+    // Check if token exists
+    if (!token.success || !token.data) {
+      return { success: false, error: "No token found" };
+    }
+    
     const response = await fetch(`${BASE_URL}/api/auth/validate-token`, {
       method: "POST",
       headers: {

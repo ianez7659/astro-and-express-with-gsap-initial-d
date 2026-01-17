@@ -1,3 +1,5 @@
+import { BASE_URL } from "../util/constants";
+
 interface LoginResponse {
   message: string;
   token: string;
@@ -13,7 +15,7 @@ export async function handleLogin(
   email: string,
   password: string
 ): Promise<LoginResponse> {
-  const res = await fetch("http://localhost:3000/api/auth/signin", {
+  const res = await fetch(`${BASE_URL}/api/auth/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
