@@ -6,6 +6,10 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   console.warn("Supabase credentials not found. Using fallback mode.");
+  console.warn("SUPABASE_URL:", supabaseUrl ? "✓ Set" : "✗ Missing");
+  console.warn("SUPABASE_ANON_KEY:", supabaseKey ? "✓ Set" : "✗ Missing");
+} else {
+  console.log("Supabase client initialized successfully");
 }
 
 const supabase =
