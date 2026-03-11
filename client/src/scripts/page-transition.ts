@@ -4,6 +4,7 @@ declare global {
   interface Window {
     navigateWithFade?: (href: string) => void;
     stopAudio?: () => void;
+    playAudio?: (src: string) => void;
   }
 }
 

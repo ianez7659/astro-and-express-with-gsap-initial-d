@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
@@ -28,7 +29,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// Supabase를 사용하여 사용자 찾기
+// find user by id
 const findUserById = async (userId) => {
   if (!supabase) {
     console.error("Supabase client not initialized");
@@ -45,7 +46,7 @@ const findUserById = async (userId) => {
     return null;
   }
   
-  // Supabase 컬럼명을 JavaScript 객체 속성명으로 변환
+  // convert supabase column names to javascript object properties
   return {
     id: data.id,
     name: data.name,
@@ -71,7 +72,7 @@ app.post("/api/auth/signup", async (req, res) => {
     return res.status(500).json({ error: "Database not configured" });
   }
 
-  // 이메일 중복 확인
+  // check if email is already in use
   const { data: existingUser } = await supabase
     .from("initiald_users")
     .select("id")
@@ -187,7 +188,7 @@ app.post("/api/auth/forgot-password", async (req, res) => {
   
   const expiresAt = new Date(Date.now() + 600000); // 10 minutes
 
-  // 기존 토큰 삭제 후 새 토큰 삽입
+  // delete existing token
   await supabase
     .from("initiald_reset_tokens")
     .delete()
@@ -219,7 +220,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     return res.status(500).json({ error: "Database not configured" });
   }
 
-  // 토큰 확인
+  // check if token is valid
   const { data: resetData, error: tokenError } = await supabase
     .from("initiald_reset_tokens")
     .select("*")
@@ -231,7 +232,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     return res.status(400).json({ error: "Invalid reset token" });
   }
 
-  // 만료 확인
+  // check if token has expired
   if (new Date(resetData.expires_at) < new Date()) {
     await supabase
       .from("initiald_reset_tokens")
@@ -240,7 +241,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     return res.status(400).json({ error: "Reset token has expired" });
   }
 
-  // 비밀번호 업데이트
+  // update password
   const hashedPassword = bcrypt.hashSync(newPassword, 10);
   const { error: updateError } = await supabase
     .from("initiald_users")
@@ -251,7 +252,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     return res.status(500).json({ error: "Failed to update password" });
   }
 
-  // 토큰 삭제
+  // delete token
   await supabase
     .from("initiald_reset_tokens")
     .delete()
@@ -309,7 +310,7 @@ app.put("/api/user/profile", verifyToken, async (req, res) => {
     return res.status(500).json({ error: "Database not configured" });
   }
 
-  // 이메일 중복 확인 (다른 사용자가 사용 중인지)
+  // check if email is already in use by another user
   if (email) {
     const { data: existingUser } = await supabase
       .from("initiald_users")
@@ -323,7 +324,7 @@ app.put("/api/user/profile", verifyToken, async (req, res) => {
     }
   }
 
-  // 업데이트할 데이터 준비
+  // prepare data to update
   const updateData = {};
   if (name) updateData.name = name;
   if (email) updateData.email = email;
@@ -443,7 +444,7 @@ module.exports = app;
 
 // For local development
 if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
