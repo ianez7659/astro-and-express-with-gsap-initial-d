@@ -1,8 +1,17 @@
-import { getLatestToken } from "../../src/services/sessionstorage";
+import { getLatestToken } from "../services/sessionstorage";
+
+interface ProfileFormData {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  phone: string;
+  email: string;
+  address: string;
+}
 
 export async function updateUserProfile(
   token: string,
-  updatedData: any
+  updatedData: ProfileFormData
 ): Promise<boolean> {
   try {
     // Commented out until token validation is ready
@@ -33,18 +42,15 @@ export async function updateUserProfile(
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById(
-    "profile-form"
-  ) as HTMLFormElement | null;
+  const form = document.getElementById("profile-form") as HTMLFormElement | null;
 
   if (!form) return;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const updatedData = {
-      firstName: (document.getElementById("firstName") as HTMLInputElement)
-        .value,
+    const updatedData: ProfileFormData = {
+      firstName: (document.getElementById("firstName") as HTMLInputElement).value,
       lastName: (document.getElementById("lastName") as HTMLInputElement).value,
       userName: (document.getElementById("userName") as HTMLInputElement).value,
       phone: (document.getElementById("phone") as HTMLInputElement).value,
