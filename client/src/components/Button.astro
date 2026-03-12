@@ -12,9 +12,10 @@ const { type = "button", text, className = "", id = "" } = Astro.props;
 <button
   type={type}
   id={id}
-  class={`w-[180px] md:w-[240px] mx-auto block border-[#ffffff] border-[2px] 
+  class={`w-[180px] md:w-[240px] mx-auto block border-white border-2 
           bg-gradient-to-r from-[#E20613] to-yellow-400 text-white py-2 
-          font-medium text-headline md:text-display-3 rounded-[15px] 
+          font-medium text-lg md:text-2xl rounded-xl
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300
           tracking-widest ${className}`}
 >
   {text}

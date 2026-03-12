@@ -1,0 +1,41 @@
+---
+export interface Props {
+  variant?: "dashboard" | "profile" | "contact";
+  showBackButton?: boolean;
+  backLabel?: string;
+}
+
+const {
+  variant = "dashboard",
+  showBackButton = false,
+  backLabel = "← Dashboard",
+} = Astro.props;
+---
+
+<nav
+  class="flex justify-between items-center w-full px-4 py-3 md:px-6 md:py-4 z-[60]"
+  aria-label={`${variant} navigation`}
+>
+  {showBackButton ? (
+    <button
+      id={variant === "contact" ? "back-to-main" : "dashboard-button"}
+      type="button"
+      aria-label={variant === "dashboard" ? "Go back" : "Go back to dashboard"}
+      class="px-4 py-2 rounded-lg font-medium font-[Orbitron]
+             bg-violet-800/90 text-white border border-violet-600
+             hover:bg-violet-700 transition shadow-md
+             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+    >
+      {backLabel}
+    </button>
+  ) : (
+    <div class="w-[120px] md:w-[140px] shrink-0" aria-hidden="true"></div>
+  )}
+
+  <img
+    src="/logo-global.png"
+    alt="Initial D Logo"
+    class="w-[180px] md:w-[260px] h-auto"
+  />
+</nav>
+

@@ -1,0 +1,18 @@
+---
+export interface Props {
+  maxWidth?: string;
+  className?: string;
+}
+
+const {
+  maxWidth = "max-w-[900px]",
+  className = "",
+} = Astro.props;
+---
+
+<section
+  class={`w-full ${maxWidth} rounded-2xl bg-[#D8D0E8F5] shadow-xl border border-violet-200 px-4 py-4 md:px-6 md:py-6 flex flex-col gap-6 ${className}`}
+>
+  <slot />
+</section>
+

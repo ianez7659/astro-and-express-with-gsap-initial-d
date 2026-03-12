@@ -1,47 +1,29 @@
 ---
 import Button from "../components/Button.astro";
 import Input from "../components/common/Input-item.astro";
+import TopNav from "@/components/common/TopNav.astro";
+import PageCard from "@/components/common/PageCard.astro";
 ---
 
 <div class="flex flex-col min-h-screen w-full">
-  <!-- Navigation section: Back button + Logo (same style as Profile) -->
-  <nav
-    class="flex justify-between items-center w-full px-4 py-3 md:px-6 md:py-4 z-[60]"
-    aria-label="Contact navigation"
-  >
-    <button
-      id="back-to-main"
-      type="button"
-      class="px-4 py-2 rounded-lg font-medium font-[Orbitron] bg-violet-800/90 text-white border border-violet-600 hover:bg-violet-700 transition shadow-md"
-    >
-      ← Dashboard
-    </button>
-    <img
-      src="/logo-global.png"
-      alt="Initial D Logo"
-      class="w-[180px] md:w-[260px] h-auto"
-    />
-  </nav>
+  <TopNav variant="contact" showBackButton backLabel="← Dashboard" />
 
   <!-- Form section: below navigation -->
   <div
     id="contact-form"
     data-anim="fade-in"
     data-delay="0.5"
-    class="relative z-[60] flex flex-1 flex-col justify-center items-center w-full min-h-0 px-2 md:px-16 gap-8 opacity-0"
+    class="relative z-[60] flex flex-1 flex-col justify-center items-center w-full min-h-0 px-2 md:px-8 gap-8 opacity-0"
   >
-    <div
-      class="relative shadow-xl p-2 md:px-5 md:py-10 w-full max-w-[880px] flex flex-col items-center justify-center rounded-lg"
-      style="background-image: linear-gradient(90deg, rgba(153, 224, 240, 0.9) 0%, rgba(229, 72, 166, 0.9) 100%)"
-    >
+    <PageCard className="bg-gradient-to-r from-sky-400/30 to-pink-500/30 text-white">
     <h2
       class="font-medium drop-shadow-[2px_2px_0px_#00000050] text-display-3 flex flex-wrap md:text-display-2 md:self-start"
     >
       <span class="text-[#E20613]">C</span><span class="text-white">ontact</span
       >
     </h2>
-    <div class="bg-[#ffffff] bg-opacity-50 rounded-lg p-2 space-y-6 w-full">
-      <form class="space-y-6">
+    <div class="bg-[#ffffff] bg-opacity-40 rounded-lg p-2 space-y-6 w-full">
+      <form class="space-y-6 drop-shadow-[2px_2px_0px_#00000050]">
         <Input
           labelText="User Name"
           id="contactName"
@@ -72,7 +54,7 @@ import Input from "../components/common/Input-item.astro";
         />
         <Button id="contactBt" text="SUBMIT" />
       </form>
-    </div>
+    </PageCard>
   </div>
   </div>
 </div>

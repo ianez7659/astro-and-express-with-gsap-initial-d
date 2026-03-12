@@ -1,5 +1,7 @@
 ---
 import InputItem from "@/components/common/Input-item.astro";
+import TopNav from "@/components/common/TopNav.astro";
+import PageCard from "@/components/common/PageCard.astro";
 type FormField = {
   labelText: string;
   name: string;
@@ -63,24 +65,7 @@ const formFields: FormField[] = [
 ---
 
 <div class="flex flex-col min-h-screen w-full">
-  <!-- Navigation section: Dashboard button + Logo -->
-  <nav
-    class="flex justify-between items-center w-full px-4 py-3 md:px-6 md:py-4 z-[60]"
-    aria-label="Profile navigation"
-  >
-    <button
-      id="dashboard-button"
-      type="button"
-      class="px-4 py-2 rounded-lg font-medium font-[Orbitron] bg-violet-800/90 text-white border border-violet-600 hover:bg-violet-700 transition shadow-md"
-    >
-      ← Dashboard
-    </button>
-    <img
-      src="/logo-global.png"
-      alt="Initial D Logo"
-      class="w-[180px] md:w-[260px] h-auto"
-    />
-  </nav>
+  <TopNav variant="profile" showBackButton backLabel="← Dashboard" />
 
   <!-- Main section: Profile card centered on page -->
   <main
@@ -90,18 +75,16 @@ const formFields: FormField[] = [
     data-duration="1"
     class="relative z-[60] flex flex-1 flex-col items-center justify-center w-full px-2 md:px-8 py-4 md:py-2 opacity-0"
   >
-    <section
-      class="w-full max-w-[900px] rounded-2xl bg-[#D8D0E8F5] shadow-xl border border-violet-200 px-4 py-4 md:px-6 md:py-6 flex flex-col gap-6"
-    >
+    <PageCard>
       <!-- Title -->
       <h1 class="text-2xl md:text-3xl font-bold font-[Orbitron] drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
         <span class="text-[#E20613]">P</span><span class="text-violet-900">rofile</span>
       </h1>
 
       <!-- Header: avatar + username + actions -->
-      <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div class="flex items-center gap-4">
-          <div class="flex justify-center items-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 border-2 border-white/60 overflow-hidden">
+          <div class="flex justify-center items-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/30 border-2 border-white/70 overflow-hidden">
             <img
               id="avatar-preview"
               src="/Profile-Photo.png"
@@ -175,7 +158,7 @@ const formFields: FormField[] = [
           ))
         }
       </form>
-    </section>
+    </PageCard>
   </main>
 </div>
 <script>
