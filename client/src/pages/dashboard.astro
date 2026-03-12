@@ -13,42 +13,109 @@ import Button from "../components/Button.astro";
     bgLayerAnimDuration=""
     bgImageAnimType="slide-right"
     bgImageAnimDelay="0.2"
+    showLogo={false}
   >
-    <div
-      id="dashboard"
-      data-anim="fade-in"
-      data-delay="0.5"
-      class="relative flex flex-col justify-center items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
-    >
-      <div class="relative bg-[#D5E5FFB2] flex flex-col items-center p-8 gap-6 rounded-lg shadow-xl">
-        <h1 class="text-4xl md:text-display-1 font-bold drop-shadow-[3px_3px_0px_rgba(0,0,0,0.8)]">
-          <span class="text-[#E20613]">D</span><span class="text-white">ashboard</span>
-        </h1>
-        <p class="text-white text-lg md:text-xl font-semibold drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)]">
-          Welcome! Choose an option below.
-        </p>
-        <div class="flex flex-col gap-4 mt-4">
+    <div class="flex flex-col min-h-screen w-full">
+      <!-- Navigation section: same style as Profile/Contact (logo on right) -->
+      <nav
+        class="flex justify-between items-center w-full px-4 py-3 md:px-6 md:py-4 z-[60]"
+        aria-label="Dashboard navigation"
+      >
+        <div class="w-[120px] md:w-[140px] shrink-0" aria-hidden="true"></div>
+        <img
+          src="/logo-global.png"
+          alt="Initial D Logo"
+          class="w-[180px] md:w-[260px] h-auto"
+        />
+      </nav>
+
+      <!-- Main content: below navigation -->
+      <div
+        id="dashboard"
+        data-anim="fade-in"
+        data-delay="0.5"
+        class="relative z-[60] flex flex-1 flex-col justify-center items-center w-full min-h-0 px-2 md:px-16 gap-8 opacity-0"
+      >
+      <div
+        class="relative bg-[#D8D0E8F5] flex flex-col items-stretch md:items-start p-6 md:p-8 gap-6 rounded-lg shadow-xl w-full max-w-[880px] border border-[#C4B8D8]"
+      >
+        <!-- Welcome header -->
+        <div class="flex flex-col w-full md:flex-row md:items-baseline md:justify-between bg-gradient-to-r from-violet-300 to-violet-500/80 pr-16 ">
+          <h1
+            class="text-3xl md:text-display-1 font-bold drop-shadow-[3px_3px_0px_rgba(0,0,0,0.8)]"
+          >
+            <span class="text-[#E20613]">D</span
+            ><span class="text-white">ashboard</span>
+          </h1>
+          <p
+            id="dashboard-username"
+            class="text-sm md:text-lg font-medium drop-shadow-[1px_1px_0px_rgba(0,0,0,0.6)] text-right md:text-left"
+          >
+            <span class="text-md" style="color: rgba(255,255,255,0.95)">Welcome back, </span><span id="dashboard-username-value" class="font-semibold md:text-2xl" style="color:rgb(233, 189, 14)"></span>
+          </p>
+        </div>
+
+        <div class="rounded-md bg-gray-500/30 p-2 md:p-2 mt-2">
+          <p
+            class="text-white text-base md:text-xl font-semibold drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)]"
+          >
+            Choose what you want to do next.
+          </p>
+
+          <!-- Quick actions -->
+          <div
+            class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 w-full"
+          >
           <button
             id="go-to-profile"
-            class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/70 text-white md:text-display-2 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+            class="group flex flex-col items-start justify-between rounded-2xl bg-[#ff0000]/80 px-5 py-4 text-left text-white shadow-md border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982]"
           >
-            Profile
+            <span class="text-sm font-semibold uppercase tracking-[0.2em] opacity-80"
+              >Profile</span
+            >
+            <span class="mt-1 text-lg md:text-2xl font-bold"
+              >Edit your information</span
+            >
+            <span class="mt-2 text-xs md:text-sm opacity-90"
+              >Name, phone, address and profile picture.</span
+            >
           </button>
+
           <button
             id="go-to-contact"
-            class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/70 text-white md:text-display-2 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+            class="group flex flex-col items-start justify-between rounded-2xl bg-[#ff0000]/80 px-5 py-4 text-left text-white shadow-md border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982]"
           >
-            Contact
+            <span class="text-sm font-semibold uppercase tracking-[0.2em] opacity-80"
+              >Contact</span
+            >
+            <span class="mt-1 text-lg md:text-2xl font-bold"
+              >Get in touch</span
+            >
+            <span class="mt-2 text-xs md:text-sm opacity-90"
+              >Send us questions or feedback.</span
+            >
           </button>
+
           <button
             id="logout-btn"
-            class="w-[320px] md:w-[500px] md:h-[100px] text-display-3 bg-[#ff0000]/70 text-white md:text-display-2 font-medium rounded-[10px] md:rounded-[20px] tracking-widest border border-transparent transition-all duration-300 ease-in-out hover:bg-orange-500 hover:border-[#FEE982] hover:text-white"
+            class="group flex flex-col items-start justify-between rounded-2xl bg-black/80 px-5 py-4 text-left text-white shadow-md border border-transparent transition-all duration-300 ease-in-out hover:bg-red-700 hover:border-[#FEE982]"
           >
-            Logout
-          </button>
+            <span class="text-sm font-semibold uppercase tracking-[0.2em] opacity-80"
+              >Logout</span
+            >
+            <span class="mt-1 text-lg md:text-2xl font-bold"
+              >Sign out safely</span
+            >
+            <span class="mt-2 text-xs md:text-sm opacity-90"
+              >Session timers will be cleared.</span
+            >
+            </button>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+  </div>
   </BackgroundContainer>
   <script type="module" src="/src/scripts/page-anim.ts"></script>
   <script>
@@ -59,6 +126,19 @@ import Button from "../components/Button.astro";
       const goToProfileBtn = document.getElementById("go-to-profile");
       const goToContactBtn = document.getElementById("go-to-contact");
       const logoutBtn = document.getElementById("logout-btn");
+      const usernameEl = document.getElementById("dashboard-username-value");
+
+      // Fill username from session storage if available
+      try {
+        const rawUser = window.sessionStorage.getItem("loginUser");
+        if (rawUser && usernameEl) {
+          const parsed = JSON.parse(rawUser);
+          const name = parsed?.name || parsed?.email || "";
+          usernameEl.textContent = name;
+        }
+      } catch (e) {
+        console.error("Failed to read user from session storage:", e);
+      }
 
       goToProfileBtn?.addEventListener("click", () => {
         if (window.navigateWithFade) {

@@ -8,19 +8,19 @@ type FormField = {
 };
 
 const commonInputStyle =
-  "w-[319px] h-[24px] md:w-[380px] md:h-[32px] bg-[#D9D9D9] text-black font-[Orbitron] font-bold text-[16px] border-none text-right";
+  "w-full  bg-violet-100 text-gray-900 font-[Orbitron] font-bold text-base border border-violet-200 rounded-lg px-3 py-2 text-right focus:ring-2 focus:ring-violet-400 outline-none";
 const commonContainerStyle =
-  "bg-white w-[350px] h-[70px] md:w-[410px] md:h-[100px] px-[20px] py-[24px] rounded-[20px] flex flex-col justify-center items-center";
+  "bg-white/90 w-full  px-4 py-3 rounded-xl flex flex-col justify-center border border-violet-200/80";
 
 const wideInputStyle =
-  "w-[319px] h-[24px] md:w-[840px] md:h-[32px] bg-[#D9D9D9] text-black font-[Orbitron] font-bold text-[16px] border-none text-right";
+  "w-full  bg-violet-100 text-gray-900 font-[Orbitron] font-bold text-base border border-violet-200 rounded-lg px-3 py-2 text-right focus:ring-2 focus:ring-violet-400 outline-none";
 const wideContainerStyle =
-  "bg-white w-[350px] h-[70px] md:w-[870px] md:h-[100px] px-[20px] py-[24px] rounded-[20px] flex flex-col justify-center items-center";
+  "bg-white/90 w-full md:col-span-2 px-4 py-3 rounded-xl flex flex-col justify-center border border-violet-200/80";
 
 const tallInputStyle =
-  "w-[319px] h-[44px] md:w-[840px] md:h-[32px] bg-[#D9D9D9] text-black font-[Orbitron] font-bold text-[16px] border-none text-right";
+  "w-full max-w-[319px] md:max-w-[860px] min-h-[44px] md:h-9 bg-violet-100 text-gray-900 font-[Orbitron] font-bold text-base border border-violet-200 rounded-lg px-3 py-2 text-right focus:ring-2 focus:ring-violet-400 outline-none resize-none";
 const tallContainerStyle =
-  "bg-white w-[350px] h-[91px] md:w-[870px] md:h-[100px] px-[20px] py-[24px] rounded-[20px] flex flex-col justify-center items-center";
+  "bg-white/90 w-full md:col-span-2 px-4 py-3 rounded-xl flex flex-col justify-center border border-violet-200/80";
 
 const formFields: FormField[] = [
   {
@@ -62,54 +62,70 @@ const formFields: FormField[] = [
 ];
 ---
 
-<!-- Dashboard Button -->
-<button
-  id="dashboard-button"
-  type="button"
-  class="absolute top-4 left-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition z-50"
->
-  ← Dashboard
-</button>
-
-<!-- Top Section: Avatar + Username & Buttons -->
-<div
-  id="forgot-form"
-  data-anim="zoom-out"
-  data-delay="0.5"
-  data-duration="1"
-  class="relative flex flex-col justify-center items-center min-h-screen w-full px-2 md:px-16 gap-8 opacity-0"
->
-  <div class="relative bg-[#D5E5FFB2] flex flex-col items-center justify-center p-8 gap-4 rounded-lg shadow-xl md:max-w-[980px] z-10">
-    <div
-      class="w-[393px] h-auto flex flex-col md:w-[900px] md:h-[200px] md:flex-row md:items-start md:px-[10px]"
+<div class="flex flex-col min-h-screen w-full">
+  <!-- Navigation section: Dashboard button + Logo -->
+  <nav
+    class="flex justify-between items-center w-full px-4 py-3 md:px-6 md:py-4 z-[60]"
+    aria-label="Profile navigation"
+  >
+    <button
+      id="dashboard-button"
+      type="button"
+      class="px-4 py-2 rounded-lg font-medium font-[Orbitron] bg-violet-800/90 text-white border border-violet-600 hover:bg-violet-700 transition shadow-md"
     >
-      <!-- Avatar -->
-      <div
-        class="w-[393px] h-[100px] md:w-[230px] md:h-[200px] flex justify-center items-center bg-[#FFFDFD80]/50"
-      >
-        <img
-          id="avatar-preview"
-          src="/Profile-Photo.png"
-          alt="Profile"
-          class="w-[100px] h-[100px] bg-white border-none rounded-full object-cover"
-        />
-      </div>
+      ← Dashboard
+    </button>
+    <img
+      src="/logo-global.png"
+      alt="Initial D Logo"
+      class="w-[180px] md:w-[260px] h-auto"
+    />
+  </nav>
 
-      <!-- Username + Buttons -->
-      <div
-        class="w-[393px] h-auto md:w-[670px] md:h-[200px] flex flex-col justify-center items-center md:items-start gap-[10px] bg-[#d62929]/70 border-t border-white md:border-none md:pt-[60px] md:pb-[60px] py-2"
-      >
-        <h2
-          id="username-display"
-          class="text-[32px] md:text-[64px] font-[800] text-white font-[Orbitron] text-center leading-[40px] md:leading-[80px] drop-shadow-[2px_2px_0px_black] w-[393px] md:w-[640px]"
-        >
-          {Astro.props.profileData?.name}
-        </h2>
-        <div class="flex flex-row flex-wrap justify-center gap-2 w-full px-2">
-          <form id="image-upload-form">
+  <!-- Main section: Profile card centered on page -->
+  <main
+    id="forgot-form"
+    data-anim="fade-in"
+    data-delay="0.5"
+    data-duration="1"
+    class="relative z-[60] flex flex-1 flex-col items-center justify-center w-full px-2 md:px-8 py-4 md:py-2 opacity-0"
+  >
+    <section
+      class="w-full max-w-[900px] rounded-2xl bg-[#D8D0E8F5] shadow-xl border border-violet-200 px-4 py-4 md:px-6 md:py-6 flex flex-col gap-6"
+    >
+      <!-- Title -->
+      <h1 class="text-2xl md:text-3xl font-bold font-[Orbitron] drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
+        <span class="text-[#E20613]">P</span><span class="text-violet-900">rofile</span>
+      </h1>
+
+      <!-- Header: avatar + username + actions -->
+      <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="flex justify-center items-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 border-2 border-white/60 overflow-hidden">
+            <img
+              id="avatar-preview"
+              src="/Profile-Photo.png"
+              alt="Profile"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="space-y-1">
+            <p class="text-white/90 text-sm md:text-base font-medium">
+              Username
+            </p>
+            <h2
+              id="username-display"
+              class="text-xl md:text-2xl font-bold font-[Orbitron] text-white drop-shadow-[1px_1px_0px_rgba(0,0,0,0.5)]"
+            >
+              {Astro.props.profileData?.name}
+            </h2>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <form id="image-upload-form" class="inline">
             <label
               for="imageInput"
-              class="w-[120px] h-[36px] bg-[#e20613] text-white text-[22px] font-bold font-[Orbitron] rounded-[20px] border-[2px] border-white flex justify-center items-center cursor-pointer"
+              class="inline-flex justify-center items-center h-9 px-4 rounded-lg bg-[#E20613] text-white text-sm font-bold font-[Orbitron] border-2 border-white cursor-pointer hover:bg-red-600 transition"
             >
               Image
             </label>
@@ -124,48 +140,43 @@ const formFields: FormField[] = [
           <button
             id="edit-button"
             type="button"
-            class="w-[120px] h-[36px] bg-[#e20613] text-white text-[22px] font-bold font-[Orbitron] rounded-[20px] border-[2px] border-white flex justify-center items-center cursor-pointer"
+            class="h-9 px-4 rounded-lg bg-[#E20613] text-white text-sm font-bold font-[Orbitron] border-2 border-white hover:bg-red-600 transition"
           >
             Edit
           </button>
           <button
             id="save-button"
             type="submit"
-            class="w-[120px] h-[36px] bg-[#e20613] text-white text-[22px] font-bold font-[Orbitron] rounded-[20px] border-[2px] border-white flex justify-center items-center cursor-pointer"
-            style="display: none;"
             form="profile-form"
+            class="h-9 px-4 rounded-lg bg-[#E20613] text-white text-sm font-bold font-[Orbitron] border-2 border-white hover:bg-red-600 transition"
+            style="display: none;"
           >
             Save
           </button>
         </div>
-      </div>
-    </div>
+      </header>
 
-    <!-- Profile Form -->
-    <form
-      id="profile-form"
-      class="w-full h-full flex flex-col items-center gap-4 px-4 py-4"
-      style="background-color: #D5E5FFB2;"
-      method="post"
-    >
-      <div
-        class="w-[369px] border-white border-4 bg-[#FFFDFD80] flex flex-col pt-1 pb-10 gap-3 px-[10px]
-              md:w-[900px] md:h-[550px] md:flex-row md:flex-wrap md:justify-between md:items-start"
+      <!-- Form section -->
+      <form
+        id="profile-form"
+        class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"
+        method="post"
       >
         {
           formFields.map((field) => (
             <div class={field.containerClass}>
               <InputItem
                 labelText={field.labelText}
+                labelClassName="text-sm md:text-base"
                 name={field.name}
                 className={field.className}
               />
             </div>
           ))
         }
-      </div>
-    </form>
-  </div>
+      </form>
+    </section>
+  </main>
 </div>
 <script>
   import {

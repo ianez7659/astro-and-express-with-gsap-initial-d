@@ -13,6 +13,7 @@ export interface Props {
   bgImageAnimType?: string;
   bgImageAnimDelay?: string;
   bgImageAnimDuration?: string;
+  showLogo?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   bgImageAnimType = "",
   bgImageAnimDelay = "",
   bgImageAnimDuration = "",
+  showLogo = true,
 } = Astro.props;
 ---
 
@@ -58,7 +60,7 @@ const {
 
   <!-- Logo and Content -->
   <div class="relative z-10">
-    <LogoImage />
+    {showLogo && <LogoImage />}
     <slot />
   </div>
 </div>
