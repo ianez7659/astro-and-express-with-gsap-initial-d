@@ -41,6 +41,11 @@ import Button from "../components/Button.astro";
       <div
         class="bg-[#ffffff] bg-opacity-70 rounded-lg p-4 md:p-6 space-y-6 w-full"
       >
+        <!-- Inline error message -->
+        <div
+          id="login-error"
+          class="hidden mb-2 rounded border border-red-500 bg-red-50 px-3 py-2 text-sm text-red-700 text-left"
+        ></div>
 
         <!-- Login Form -->
         <form id="login-form" class="space-y-6">
@@ -68,7 +73,7 @@ import Button from "../components/Button.astro";
               class="w-full p-2 rounded-[10px] border border-black outline-none"
             />
           </div>
-          <Button type="submit" text="SIGN IN" />
+          <Button id="login-submit-btn" type="submit" text="SIGN IN" />
         </form>
 
         <!-- Additional Links -->
@@ -180,13 +185,19 @@ import Button from "../components/Button.astro";
 
         const emailInput = form?.querySelector('input[name="email"]');
         const passwordInput = form?.querySelector('input[name="password"]');
+        const submitBtn = document.getElementById("login-submit-btn");
 
         if (
           emailInput instanceof HTMLInputElement &&
-          passwordInput instanceof HTMLInputElement
+          passwordInput instanceof HTMLInputElement &&
+          submitBtn instanceof HTMLButtonElement
         ) {
           const email = emailInput.value;
           const password = passwordInput.value;
+
+          // start loading state
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Signing in...";
 
           try {
             const data = await handleLogin(email, password);
@@ -198,7 +209,6 @@ import Button from "../components/Button.astro";
               if (window.playAudio) {
                 window.playAudio("/audio/initiald-eyecatch-1.mp4");
               }
-              alert(data.message);
               if (window.navigateWithFade) {
                 window.navigateWithFade("/dashboard");
               } else {
@@ -220,6 +230,10 @@ import Button from "../components/Button.astro";
             } else {
               alert(message);
             }
+          } finally {
+            // if we did not navigate away, reset button
+            submitBtn.disabled = false;
+            submitBtn.textContent = "SIGN IN";
           }
         }
       });
