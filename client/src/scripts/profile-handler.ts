@@ -41,34 +41,42 @@ export async function updateUserProfile(
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("profile-form") as HTMLFormElement | null;
+// Do nothing during SSR; only run in the browser
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById(
+      "profile-form"
+    ) as HTMLFormElement | null;
 
-  if (!form) return;
+    if (!form) return;
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    const updatedData: ProfileFormData = {
-      firstName: (document.getElementById("firstName") as HTMLInputElement).value,
-      lastName: (document.getElementById("lastName") as HTMLInputElement).value,
-      userName: (document.getElementById("userName") as HTMLInputElement).value,
-      phone: (document.getElementById("phone") as HTMLInputElement).value,
-      email: (document.getElementById("email") as HTMLInputElement).value,
-      address: (document.getElementById("address") as HTMLTextAreaElement)
-        .value,
-    };
+      const updatedData: ProfileFormData = {
+        firstName: (document.getElementById("firstName") as HTMLInputElement)
+          .value,
+        lastName: (document.getElementById("lastName") as HTMLInputElement)
+          .value,
+        userName: (document.getElementById("userName") as HTMLInputElement)
+          .value,
+        phone: (document.getElementById("phone") as HTMLInputElement).value,
+        email: (document.getElementById("email") as HTMLInputElement).value,
+        address: (document.getElementById("address") as HTMLTextAreaElement)
+          .value,
+      };
 
-    const tokenResponse = await getLatestToken();
-    if (tokenResponse.success && tokenResponse.data) {
-      const result = await updateUserProfile(tokenResponse.data, updatedData);
-      if (result) {
-        alert("Profile updated successfully!");
+      const tokenResponse = await getLatestToken();
+      if (tokenResponse.success && tokenResponse.data) {
+        const result = await updateUserProfile(tokenResponse.data, updatedData);
+        if (result) {
+          alert("Profile updated successfully!");
+        } else {
+          alert("Failed to update profile.");
+        }
       } else {
-        alert("Failed to update profile.");
+        alert("Token missing.");
       }
-    } else {
-      alert("Token missing.");
-    }
+    });
   });
-});
+}
