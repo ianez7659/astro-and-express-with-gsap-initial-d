@@ -2,7 +2,7 @@
 import ContactForm from "../components/ContactForm.astro";
 import ProtectedPageLayout from "../layout/protectedPageLayout.astro";
 import BackgroundContainer from "../components/common/background-container.astro";
-import "../scripts/page-anim.ts";
+import pageAnimUrl from "../scripts/page-anim.ts?url";
 ---
 
 <ProtectedPageLayout title="Contact">
@@ -20,4 +20,5 @@ import "../scripts/page-anim.ts";
   >
     <ContactForm />
   </BackgroundContainer>
+  <script type="module" src={pageAnimUrl}></script>
 </ProtectedPageLayout>

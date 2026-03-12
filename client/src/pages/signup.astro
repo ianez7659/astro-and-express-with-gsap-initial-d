@@ -3,7 +3,7 @@ import SignUp from "../components/signup-form.astro";
 import Layout from "../layout/layout.astro";
 import SessionDialog from "../components/session-timeout-dialog.astro";
 import BackgroundContainer from "../components/common/background-container.astro";
-import "../scripts/page-anim.ts";
+import pageAnimUrl from "../scripts/page-anim.ts?url";
 ---
 
 <Layout title="Signup">
@@ -20,4 +20,5 @@ import "../scripts/page-anim.ts";
   >
     <SignUp />
   </BackgroundContainer>
+  <script type="module" src={pageAnimUrl}></script>
 </Layout>

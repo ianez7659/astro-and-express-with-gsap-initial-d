@@ -2,8 +2,8 @@
 import EditProfileForm from "@/components/EditProfileForm.astro";
 import ProtectedPageLayout from "@/layout/protectedPageLayout.astro";
 import BackgroundContainer from "../components/common/background-container.astro";
-import "../scripts/page-anim.ts";
-import "../scripts/profile-handler.ts";
+import pageAnimUrl from "../scripts/page-anim.ts?url";
+import profileHandlerUrl from "../scripts/profile-handler.ts?url";
 ---
 
 <ProtectedPageLayout title="User Profile">
@@ -19,4 +19,6 @@ import "../scripts/profile-handler.ts";
   >
     <EditProfileForm />
   </BackgroundContainer>
+  <script type="module" src={pageAnimUrl}></script>
+  <script type="module" src={profileHandlerUrl}></script>
 </ProtectedPageLayout>
