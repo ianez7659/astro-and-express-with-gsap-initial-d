@@ -2,7 +2,6 @@
 import ProtectedPageLayout from "@/layout/protectedPageLayout.astro";
 import BackgroundContainer from "../components/common/background-container.astro";
 import Button from "../components/Button.astro";
-import pageAnimUrl from "../scripts/page-anim.ts?url";
 ---
 
 <ProtectedPageLayout title="Dashboard">
@@ -118,7 +117,7 @@ import pageAnimUrl from "../scripts/page-anim.ts?url";
   </div>
   </div>
   </BackgroundContainer>
-  <script type="module" src={pageAnimUrl}></script>
+  <script type="module" src="/page-anim.js"></script>
   <script>
     import { removeLoginInfo } from "../services/sessionstorage";
     import { clearSessionTimers } from "../services/sessionTimer";

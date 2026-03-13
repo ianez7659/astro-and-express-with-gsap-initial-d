@@ -2,7 +2,6 @@
 import Layout from "../layout/layout.astro";
 import ForgotForm from "../components/forgot-form.astro";
 import BackgroundContainer from "../components/common/background-container.astro";
-import pageAnimUrl from "../scripts/page-anim.ts?url";
 ---
 
 <Layout title="Forgot">
@@ -20,5 +19,5 @@ import pageAnimUrl from "../scripts/page-anim.ts?url";
   >
     <ForgotForm />
   </BackgroundContainer>
-  <script type="module" src={pageAnimUrl}></script>
+  <script type="module" src="/page-anim.js"></script>
 </Layout>
